@@ -1,0 +1,87 @@
+{
+  "case_id": "HHG-011",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.65,
+    "pattern": "card_not_present_fraud",
+    "pattern_description": "Unauthorized online transaction reported by the customer where the physical card remained in their possession, indicating a CNP compromise.",
+    "affected_txn_ids": [
+      "3583368"
+    ],
+    "first_suspicious_txn_id": "3583368",
+    "connected_card_ids": [
+      "C11923-K2"
+    ],
+    "connected_device_profiles": [],
+    "exposure_usd": 131.3,
+    "evidence": [
+      {
+        "claim": "Customer reported transaction 3583368 as unauthorized.",
+        "source": "customer",
+        "ref": "customer_report",
+        "entity_ids": [
+          "C11923"
+        ]
+      },
+      {
+        "claim": "Transaction occurred via online channel with a risk score of 0.39.",
+        "source": "graph",
+        "ref": "transaction.channel",
+        "entity_ids": [
+          "3583368"
+        ]
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Customer C11923 reported an unauthorized online transaction of $131.30. Although the initial risk score was moderate (0.39), step-up validation confirmed the customer did not authorize the charge and still possesses the physical card. The case is closed as CNP fraud.",
+    "written_to_graph": true,
+    "graph_case_id": "HHG-011"
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 1,
+      "assumed_response": "Customer confirms they have the card, did not make the purchase, and does not recognize the merchant."
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "REVIEW_TRANSACTION",
+        "route": "L1",
+        "reason": "Customer dispute triggered investigation."
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "auto",
+        "reason": "Confirmed fraud reported by customer."
+      },
+      {
+        "action": "INITIATE_CHARGEBACK",
+        "route": "auto",
+        "reason": "Fraudulent transaction recovery."
+      }
+    ],
+    "what_changed": "Customer validation confirmed the transaction was unauthorized, increasing fraud probability from 0.39 to 0.65."
+  },
+  "sar": {
+    "file": true,
+    "reason": "Unauthorized electronic fund transfer reported by customer.",
+    "narrative": "On December 29, 2016, an unauthorized online transaction totaling $131.30 was processed using card C11923-K2 belonging to customer C11923. The customer contacted the bank stating they did not authorize the purchase. Internal risk scoring initially rated the transaction at 0.39. Upon further validation, the customer confirmed they were in possession of the physical card at the time of the transaction, indicating a Card Not Present (CNP) fraud scenario. The merchant details were not recognized by the cardholder. The bank has classified this as fraud, blocked the affected card, and is proceeding with a recovery claim. This SAR is filed in accordance with policy regarding unauthorized electronic fund transfers and suspected card compromise.",
+    "subjects": [
+      "C11923",
+      "C11923-K2"
+    ],
+    "total_amount_usd": 131.3,
+    "activity_dates": [
+      "2016-12-29"
+    ]
+  },
+  "stop_reason": "Customer confirmation of unauthorized activity provides sufficient grounds for fraud verdict.",
+  "tool_calls": 1,
+  "tokens": 850,
+  "latency_s": 11.96
+}

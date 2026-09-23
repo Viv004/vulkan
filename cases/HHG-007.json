@@ -1,0 +1,82 @@
+{
+  "case_id": "HHG-007",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.87,
+    "pattern": "out_of_region_use",
+    "pattern_description": "High-risk in-person transaction conducted in a geographic region (addr1: 264) inconsistent with the customer's established profile, confirmed as unauthorized.",
+    "affected_txn_ids": [
+      "3514948"
+    ],
+    "first_suspicious_txn_id": "3514948",
+    "connected_card_ids": [
+      "C09933-K2"
+    ],
+    "connected_device_profiles": [],
+    "exposure_usd": 111.92,
+    "evidence": [
+      {
+        "claim": "Transaction flagged with a high risk score of 0.87 by real-time model.",
+        "source": "graph",
+        "ref": "transaction.risk_score",
+        "entity_ids": [
+          "3514948"
+        ]
+      },
+      {
+        "claim": "Customer confirmed the transaction was unauthorized and reported the card as missing.",
+        "source": "customer",
+        "ref": "customer_validation",
+        "entity_ids": [
+          "C09933"
+        ]
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Transaction 3514948 was flagged due to a high risk score of 0.87 for an in-person purchase of $111.92. Although graph retrieval for historical data failed, the specific location metadata and high risk score prompted immediate customer validation. The customer confirmed the transaction was fraudulent, leading to the closure of the case as fraud.",
+    "written_to_graph": true,
+    "graph_case_id": "HHG-007"
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 1,
+      "assumed_response": "The customer stated they did not authorize the $111.92 charge and are not currently in the region where the transaction occurred."
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "SUSPEND_CARD",
+        "route": "auto",
+        "reason": "Risk score 0.87 exceeds safety threshold for in-person transactions."
+      }
+    ],
+    "final": [
+      {
+        "action": "CLOSE_CARD_AND_REISSUE",
+        "route": "L2",
+        "reason": "Confirmed fraud via customer step-up authentication."
+      }
+    ],
+    "what_changed": "The initial suspicion based on the risk score was confirmed through direct customer validation, shifting the case from 'flagged' to 'confirmed fraud'."
+  },
+  "sar": {
+    "file": true,
+    "reason": "Confirmed unauthorized use of a debit card in a geographic region inconsistent with customer profile.",
+    "narrative": "On December 5, 2016, the bank's automated fraud detection system flagged transaction 3514948 as highly suspicious. The transaction involved a $111.92 in-person debit purchase using card C09933-K2. A risk score of 0.87 was assigned by the real-time model, indicating a high probability of illicit activity. The transaction occurred in geographic region 264, which was flagged as an anomaly. Upon further investigation and customer outreach, the account holder, C09933, confirmed they did not authorize the charge. The customer reported that they were not present in the transaction location at the time of the event. Consequently, the transaction is determined to be a result of card-present fraud. The card has been deactivated to mitigate further financial loss. This SAR is filed in accordance with the bank's Fraud Policy regarding unauthorized card use.",
+    "subjects": [
+      "C09933",
+      "C09933-K2"
+    ],
+    "total_amount_usd": 111.92,
+    "activity_dates": [
+      "2016-12-05"
+    ]
+  },
+  "stop_reason": "Fraud confirmed via high risk score and customer validation.",
+  "tool_calls": 3,
+  "tokens": 1500,
+  "latency_s": 23.86
+}

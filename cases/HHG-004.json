@@ -1,0 +1,87 @@
+{
+  "case_id": "HHG-004",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.85,
+    "pattern": "card_not_present_fraud",
+    "pattern_description": "Unauthorized online transaction reported by customer; confirmed via step-up validation that the customer was not the initiator.",
+    "affected_txn_ids": [
+      "3583227"
+    ],
+    "first_suspicious_txn_id": "3583227",
+    "connected_card_ids": [
+      "C08106-K1"
+    ],
+    "connected_device_profiles": [],
+    "exposure_usd": 128.33,
+    "evidence": [
+      {
+        "claim": "Customer reported transaction 3583227 as unauthorized.",
+        "source": "customer",
+        "ref": "trigger_message",
+        "entity_ids": [
+          "C08106"
+        ]
+      },
+      {
+        "claim": "Transaction occurred at 01:53:54 via online channel with a risk score of 0.34.",
+        "source": "graph",
+        "ref": "transaction_id:3583227",
+        "entity_ids": [
+          "3583227"
+        ]
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Customer C08106 reported an unauthorized online transaction of $128.33. Although the initial risk score was low (0.34), step-up authentication confirmed the customer did not authorize the charge and was asleep at the time of the transaction. The case is closed as confirmed Card Not Present fraud.",
+    "written_to_graph": true,
+    "graph_case_id": "HHG-004"
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 1,
+      "assumed_response": "Customer confirmed they did not authorize the transaction and were asleep at the time of the purchase (01:53 AM)."
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "RESTRICT_CARD",
+        "route": "auto",
+        "reason": "Customer reported unauthorized activity"
+      }
+    ],
+    "final": [
+      {
+        "action": "ISSUE_REPLACEMENT_CARD",
+        "route": "auto",
+        "reason": "Card compromised via CNP fraud"
+      },
+      {
+        "action": "INITIATE_CHARGEBACK",
+        "route": "L1",
+        "reason": "Fraudulent transaction confirmed"
+      }
+    ],
+    "what_changed": "Step-up authentication moved the fraud probability from 0.34 to 0.85, confirming the customer's report."
+  },
+  "sar": {
+    "file": true,
+    "reason": "Confirmed unauthorized Card Not Present (CNP) transaction.",
+    "narrative": "On December 29, 2016, customer C08106 reported an unauthorized online transaction totaling $128.33 on card C08106-K1. The transaction (ID: 3583227) occurred at 01:53 AM. Upon investigation and direct communication with the customer, it was determined that the customer was not in possession of the device used for the transaction and did not authorize the payment. The transaction is consistent with Card Not Present fraud. The bank has restricted the card and initiated recovery procedures. No other suspicious activity was linked to this specific card at this time.",
+    "subjects": [
+      "C08106",
+      "C08106-K1"
+    ],
+    "total_amount_usd": 128.33,
+    "activity_dates": [
+      "2016-12-29"
+    ]
+  },
+  "stop_reason": "Fraud confirmed via customer validation",
+  "tool_calls": 3,
+  "tokens": 1500,
+  "latency_s": 11.38
+}

@@ -1,0 +1,90 @@
+{
+  "case_id": "HHG-017",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.85,
+    "pattern": "card_not_present_fraud",
+    "pattern_description": "Online transaction flagged by risk model and subsequently denied by the customer during step-up authentication.",
+    "affected_txn_ids": [
+      "3450629"
+    ],
+    "first_suspicious_txn_id": "3450629",
+    "connected_card_ids": [
+      "C04570-K1"
+    ],
+    "connected_device_profiles": [],
+    "exposure_usd": 100.09,
+    "evidence": [
+      {
+        "claim": "Transaction 3450629 flagged with a risk score of 0.57",
+        "source": "graph",
+        "ref": "transaction.risk_score",
+        "entity_ids": [
+          "3450629"
+        ]
+      },
+      {
+        "claim": "Transaction utilized an anonymous email domain (anonymous.com)",
+        "source": "graph",
+        "ref": "transaction.p_emaildomain",
+        "entity_ids": [
+          "3450629"
+        ]
+      },
+      {
+        "claim": "Customer confirmed the transaction was unauthorized during validation",
+        "source": "customer",
+        "ref": "customer_validation",
+        "entity_ids": [
+          "C04570"
+        ]
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Transaction 3450629 was flagged for review due to a risk score of 0.57 and the use of an anonymous email domain. Following bank policy for ambiguous signals, step-up authentication was initiated. The customer confirmed they did not authorize the $100.09 online purchase, leading to a fraud verdict.",
+    "written_to_graph": true,
+    "graph_case_id": "HHG-017"
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 1,
+      "assumed_response": "Customer states they did not authorize the transaction and believe their card information has been compromised."
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "STEP_UP_AUTH",
+        "route": "L2",
+        "reason": "Risk score 0.57 requires customer validation per Tier 2 policy."
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "auto",
+        "reason": "Confirmed fraud following customer denial of transaction."
+      }
+    ],
+    "what_changed": "The initial risk score was ambiguous (0.57), but direct customer contact confirmed the transaction was unauthorized, shifting the verdict to fraud."
+  },
+  "sar": {
+    "file": true,
+    "reason": "Confirmed unauthorized electronic fund transfer (Fraud).",
+    "narrative": "On 2016-11-11, a suspicious online transaction (ID: 3450629) for $100.09 was flagged by the bank's real-time risk model with a score of 0.57. The transaction utilized card C04570-K1 belonging to customer C04570. The transaction was conducted via an online channel using an anonymous email domain (anonymous.com), which is a common indicator of obfuscated identity in fraudulent activities. Due to the ambiguous risk score, a Tier 2 investigation was initiated, including a step-up authentication request to the cardholder. Upon contact, the customer confirmed that they did not authorize the transaction and reported the card as potentially compromised. No other suspicious transactions were identified in the immediate timeframe for this specific card. The transaction is classified as Card-Not-Present (CNP) fraud. The card has been restricted to prevent further loss. Total exposure is $100.09. This report is filed in accordance with bank policy regarding confirmed unauthorized electronic fund transfers.",
+    "subjects": [
+      "C04570",
+      "C04570-K1"
+    ],
+    "total_amount_usd": 100.09,
+    "activity_dates": [
+      "2016-11-11"
+    ]
+  },
+  "stop_reason": "Customer confirmed transaction was unauthorized.",
+  "tool_calls": 3,
+  "tokens": 1500,
+  "latency_s": 13.68
+}

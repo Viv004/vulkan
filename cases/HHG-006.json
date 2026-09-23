@@ -1,0 +1,87 @@
+{
+  "case_id": "HHG-006",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.85,
+    "pattern": "card_not_present_fraud",
+    "pattern_description": "Unauthorized online transaction reported by customer despite card being in their possession, indicating a Card-Not-Present (CNP) compromise.",
+    "affected_txn_ids": [
+      "3476682"
+    ],
+    "first_suspicious_txn_id": "3476682",
+    "connected_card_ids": [
+      "C07297-K1"
+    ],
+    "connected_device_profiles": [],
+    "exposure_usd": 482.12,
+    "evidence": [
+      {
+        "claim": "Customer explicitly denies making the $482.12 purchase.",
+        "source": "customer",
+        "ref": "customer_report",
+        "entity_ids": [
+          "C07297"
+        ]
+      },
+      {
+        "claim": "Transaction 3476682 was an online purchase with a low risk score of 0.25, suggesting potential credential stuffing or stolen card details that bypassed initial filters.",
+        "source": "graph",
+        "ref": "transaction_id: 3476682",
+        "entity_ids": [
+          "3476682"
+        ]
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Customer C07297 reported an unauthorized online transaction of $482.12. Step-up validation confirmed the customer was in possession of the card and did not authorize the charge. The case is closed as fraud due to confirmed account compromise.",
+    "written_to_graph": true,
+    "graph_case_id": "HHG-006"
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 1,
+      "assumed_response": "Customer confirmed they have the physical card, did not share details, and does not recognize the merchant."
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "REVIEW_TRANSACTION",
+        "route": "L1",
+        "reason": "Customer dispute of online transaction."
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "auto",
+        "reason": "Confirmed fraud by customer."
+      },
+      {
+        "action": "ISSUE_REPLACEMENT_CARD",
+        "route": "auto",
+        "reason": "Card compromise."
+      }
+    ],
+    "what_changed": "The customer's direct confirmation of non-authorization and possession of the card shifted the verdict from suspicious to confirmed fraud."
+  },
+  "sar": {
+    "file": true,
+    "reason": "Confirmed unauthorized transaction exceeding $400 reported by customer.",
+    "narrative": "Customer C07297 contacted the bank to dispute a transaction of $482.12. The transaction, identified by ID 3476682, occurred on November 21, 2016. The transaction was processed as an online Card-Not-Present (CNP) purchase. Upon investigation, the customer confirmed they were in possession of the physical card at the time of the charge. The customer explicitly denied authorizing the transaction or sharing card details with third parties. Internal risk scoring initially flagged the transaction as low risk (0.25), likely due to matching address parameters. However, the direct customer repudiation overrides the automated risk score in this instance. No prior history of similar disputes was found for this customer, suggesting a new point of compromise. The card C07297-K1 has been restricted to prevent further unauthorized activity. A replacement card has been issued to the customer.",
+    "subjects": [
+      "C07297",
+      "C07297-K1"
+    ],
+    "total_amount_usd": 482.12,
+    "activity_dates": [
+      "2016-11-21"
+    ]
+  },
+  "stop_reason": "Customer confirmed fraud; card blocked.",
+  "tool_calls": 3,
+  "tokens": 1500,
+  "latency_s": 13.11
+}

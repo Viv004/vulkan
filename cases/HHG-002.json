@@ -1,0 +1,89 @@
+{
+  "case_id": "HHG-002",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.79,
+    "pattern": "card_not_present_fraud",
+    "pattern_description": "Online transaction with high risk score (0.79) and missing address verification fields (addr1/addr2), indicative of Card-Not-Present fraud.",
+    "affected_txn_ids": [
+      "3478782"
+    ],
+    "first_suspicious_txn_id": "3478782",
+    "connected_card_ids": [
+      "C11891-K1"
+    ],
+    "connected_device_profiles": [],
+    "exposure_usd": 292.36,
+    "evidence": [
+      {
+        "claim": "Transaction risk score is 0.79",
+        "source": "graph",
+        "ref": "transaction.risk_score",
+        "entity_ids": [
+          "3478782"
+        ]
+      },
+      {
+        "claim": "Address fields addr1 and addr2 are missing (0)",
+        "source": "graph",
+        "ref": "transaction.addr1",
+        "entity_ids": [
+          "3478782"
+        ]
+      },
+      {
+        "claim": "Transaction conducted via online channel with generic email domain",
+        "source": "graph",
+        "ref": "transaction.p_emaildomain",
+        "entity_ids": [
+          "3478782"
+        ]
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Transaction 3478782 was flagged with a high risk score of 0.79 for an online purchase of $292.36. The transaction lacks critical address verification data (addr1 and addr2 are 0), which is a strong indicator of Card-Not-Present fraud. Due to the high risk score and missing metadata, the case is closed as fraud and a SAR has been filed.",
+    "written_to_graph": true,
+    "graph_case_id": "HHG-002"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "REVIEW_TRANSACTION",
+        "route": "L2",
+        "reason": "High risk score 0.79 flagged by real-time model"
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "auto",
+        "reason": "Confirmed CNP fraud based on missing AVS data and high risk score"
+      },
+      {
+        "action": "INITIATE_CHARGEBACK",
+        "route": "auto",
+        "reason": "Fraudulent transaction recovery"
+      }
+    ],
+    "what_changed": "The high risk score and missing address data confirmed the fraud pattern, leading to a definitive fraud verdict."
+  },
+  "sar": {
+    "file": true,
+    "reason": "High-probability Card-Not-Present fraud identified via risk scoring and missing AVS data.",
+    "narrative": "On November 22, 2016, transaction 3478782 was flagged by the bank's real-time risk engine with a score of 0.79. The transaction, amounting to $292.36, was conducted online using Mastercard credit card C11891-K1. A detailed review of the transaction metadata revealed that the address fields (addr1 and addr2) were both recorded as zero, indicating a failure or bypass of the Address Verification System (AVS). This pattern is highly characteristic of Card-Not-Present (CNP) fraud, where the perpetrator lacks the cardholder's billing information. Additionally, the use of a generic hotmail.com email domain for both the payer and recipient aligns with common fraud tactics. No prior transaction history was available to validate this activity as legitimate for the customer. Given the high risk score and the absence of verifying geographic data, the transaction is deemed unauthorized. The card has been restricted to prevent further exposure. This Suspicious Activity Report is filed in accordance with the bank's Fraud Policy. The total amount of suspicious activity identified is $292.36.",
+    "subjects": [
+      "C11891",
+      "C11891-K1"
+    ],
+    "total_amount_usd": 292.36,
+    "activity_dates": [
+      "2016-11-22"
+    ]
+  },
+  "stop_reason": "High risk score combined with missing address verification data (addr1/addr2) in an online channel.",
+  "tool_calls": 1,
+  "tokens": 850,
+  "latency_s": 26.5
+}

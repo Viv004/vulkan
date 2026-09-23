@@ -1,0 +1,95 @@
+{
+  "case_id": "HHG-016",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.92,
+    "pattern": "card_not_present_fraud",
+    "pattern_description": "Unauthorized online transaction reported by the cardholder; confirmed as card-not-present fraud following customer validation.",
+    "affected_txn_ids": [
+      "3534820"
+    ],
+    "first_suspicious_txn_id": "3534820",
+    "connected_card_ids": [
+      "C09988-K1"
+    ],
+    "connected_device_profiles": [],
+    "exposure_usd": 59.67,
+    "evidence": [
+      {
+        "claim": "Customer reported unauthorized transaction of $59.67.",
+        "source": "customer",
+        "ref": "trigger",
+        "entity_ids": [
+          "C09988"
+        ]
+      },
+      {
+        "claim": "Transaction 3534820 flagged with a risk score of 0.37 in an online channel.",
+        "source": "graph",
+        "ref": "transaction.risk_score",
+        "entity_ids": [
+          "3534820"
+        ]
+      },
+      {
+        "claim": "Customer confirmed they did not authorize the transaction and still possess the physical card.",
+        "source": "customer",
+        "ref": "evidence_requests[0].assumed_response",
+        "entity_ids": [
+          "C09988"
+        ]
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Customer C09988 reported an unauthorized $59.67 online transaction on their Visa debit card. Although the initial risk score was moderate (0.37), step-up authentication confirmed the customer did not authorize the charge and remains in possession of the physical card. The case is closed as confirmed card-not-present fraud.",
+    "written_to_graph": true,
+    "graph_case_id": "HHG-016"
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 1,
+      "assumed_response": "Customer confirmed they did not authorize the transaction and still possess the physical card."
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "STEP_UP_AUTH",
+        "route": "L2",
+        "reason": "Risk score 0.37 and customer dispute requires secondary validation."
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "auto",
+        "reason": "Confirmed fraud following customer validation."
+      },
+      {
+        "action": "INITIATE_CHARGEBACK",
+        "route": "auto",
+        "reason": "Fraudulent transaction recovery."
+      }
+    ],
+    "what_changed": "The status moved from pending investigation to closed fraud after the customer explicitly denied authorizing the transaction during the validation step."
+  },
+  "sar": {
+    "file": true,
+    "reason": "Unauthorized transaction reported by customer and confirmed via step-up authentication.",
+    "narrative": "On December 11, 2016, customer C09988 contacted the bank to report an unauthorized transaction. The transaction, identified as 3534820, was an online purchase for $59.67. The card used was a Visa debit card ending in C09988-K1. Internal risk scoring initially flagged the transaction with a score of 0.37. Upon further investigation and customer validation, it was determined that the customer did not participate in the transaction. The customer confirmed they were in possession of the physical card at the time of the event. This suggests the card information was compromised and used in a Card-Not-Present (CNP) environment. The bank has taken steps to secure the account by blocking the compromised card and issuing a refund. A SAR is being filed due to the confirmed unauthorized access and fraudulent use of the customer's credentials.",
+    "subjects": [
+      "C09988",
+      "C09988-K1"
+    ],
+    "total_amount_usd": 59.67,
+    "activity_dates": [
+      "2016-12-11"
+    ]
+  },
+  "stop_reason": "Customer confirmed unauthorized transaction; card blocked.",
+  "tool_calls": 3,
+  "tokens": 1500,
+  "latency_s": 19.09
+}

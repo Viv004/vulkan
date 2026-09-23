@@ -1,0 +1,81 @@
+{
+  "case_id": "HHG-019",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.9,
+    "pattern": "card_not_present_fraud",
+    "pattern_description": "High-risk online transaction flagged by real-time model (0.90) featuring a mismatch between purchaser email domain (verizon.net) and recipient email domain (gmail.com).",
+    "affected_txn_ids": [
+      "3503878"
+    ],
+    "first_suspicious_txn_id": "3503878",
+    "connected_card_ids": [
+      "C07987-K2"
+    ],
+    "connected_device_profiles": [],
+    "exposure_usd": 99.92,
+    "evidence": [
+      {
+        "claim": "Transaction risk score is 0.90, exceeding the high-risk threshold.",
+        "source": "graph",
+        "ref": "transaction.risk_score",
+        "entity_ids": [
+          "3503878"
+        ]
+      },
+      {
+        "claim": "Mismatch between purchaser email domain (verizon.net) and recipient email domain (gmail.com).",
+        "source": "graph",
+        "ref": "transaction.p_emaildomain/r_emaildomain",
+        "entity_ids": [
+          "3503878"
+        ]
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Transaction 3503878 was flagged with a critical risk score of 0.90. The transaction involves an online purchase where the sender and receiver email domains differ significantly, a common indicator of unauthorized card-not-present fraud. Due to the high model confidence and suspicious metadata, the transaction is classified as fraud.",
+    "written_to_graph": true,
+    "graph_case_id": "HHG-019"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "auto",
+        "reason": "High risk score 0.90"
+      }
+    ],
+    "final": [
+      {
+        "action": "PERMANENT_BLOCK",
+        "route": "L2",
+        "reason": "Confirmed CNP fraud pattern"
+      },
+      {
+        "action": "NOTIFY_CUSTOMER",
+        "route": "auto",
+        "reason": "Fraudulent activity detected"
+      }
+    ],
+    "what_changed": "The transaction was confirmed as fraud based on the high risk score and email domain discrepancy."
+  },
+  "sar": {
+    "file": true,
+    "reason": "High-risk transaction score and suspicious email mismatch indicating potential card-not-present fraud.",
+    "narrative": "On December 1, 2016, a transaction (ID: 3503878) for $99.92 was attempted using card C07987-K2. The transaction was flagged by the bank's real-time risk model with a score of 0.90, indicating a very high probability of fraud. Investigation of the transaction metadata revealed a discrepancy between the purchaser's email domain (verizon.net) and the recipient's email domain (gmail.com). This pattern is highly indicative of unauthorized card-not-present activity where a third party uses stolen credentials to ship goods to a different digital identity. The transaction was conducted via an online channel. Based on the high probability of fraud and the suspicious nature of the email mismatch, this report is filed to document potential fraudulent activity.",
+    "subjects": [
+      "C07987",
+      "C07987-K2"
+    ],
+    "total_amount_usd": 99.92,
+    "activity_dates": [
+      "2016-12-01"
+    ]
+  },
+  "stop_reason": "High risk score and clear fraud indicators met threshold for immediate closure.",
+  "tool_calls": 1,
+  "tokens": 850,
+  "latency_s": 11.58
+}

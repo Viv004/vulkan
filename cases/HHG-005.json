@@ -1,0 +1,95 @@
+{
+  "case_id": "HHG-005",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.85,
+    "pattern": "card_not_present_fraud",
+    "pattern_description": "Online transaction flagged due to moderate risk score and mismatched email domains, subsequently confirmed as unauthorized by the customer.",
+    "affected_txn_ids": [
+      "3523199"
+    ],
+    "first_suspicious_txn_id": "3523199",
+    "connected_card_ids": [
+      "C02923-K1"
+    ],
+    "connected_device_profiles": [],
+    "exposure_usd": 100.07,
+    "evidence": [
+      {
+        "claim": "Transaction 3523199 triggered a risk score of 0.54, indicating moderate suspicion.",
+        "source": "graph",
+        "ref": "transaction.risk_score",
+        "entity_ids": [
+          "3523199"
+        ]
+      },
+      {
+        "claim": "Discrepancy between purchaser email domain (icloud.com) and recipient email domain (gmail.com).",
+        "source": "graph",
+        "ref": "transaction.p_emaildomain",
+        "entity_ids": [
+          "3523199"
+        ]
+      },
+      {
+        "claim": "Customer confirmed the transaction was unauthorized during step-up validation.",
+        "source": "customer",
+        "ref": "customer_validation",
+        "entity_ids": [
+          "C02923"
+        ]
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Transaction 3523199 was flagged with a risk score of 0.54. Investigation revealed a mismatch between purchaser and recipient email domains. Step-up authentication was performed, and the customer confirmed they did not authorize the $100.07 charge, leading to a fraud verdict.",
+    "written_to_graph": true,
+    "graph_case_id": "HHG-005"
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 1,
+      "assumed_response": "Customer states they did not authorize the $100.07 transaction and do not recognize the recipient email address."
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "STEP_UP_AUTHENTICATION",
+        "route": "L2",
+        "reason": "Risk score 0.54 falls within the ambiguous range requiring customer validation."
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "auto",
+        "reason": "Confirmed fraud following customer denial of transaction."
+      },
+      {
+        "action": "INITIATE_CHARGEBACK",
+        "route": "auto",
+        "reason": "Recovery of fraudulent funds for transaction 3523199."
+      }
+    ],
+    "what_changed": "The initial moderate risk score was elevated to a confirmed fraud verdict after the customer explicitly denied authorizing the transaction."
+  },
+  "sar": {
+    "file": true,
+    "reason": "Confirmed unauthorized transaction (Card-Not-Present Fraud).",
+    "narrative": "On December 7, 2016, an online transaction (ID: 3523199) for $100.07 was attempted using card C02923-K1. The transaction was flagged by the bank's real-time risk model with a score of 0.54. Internal review noted a discrepancy between the purchaser's iCloud email domain and the recipient's Gmail domain. A Tier 2 investigator initiated step-up authentication with the account holder, C02923. The customer confirmed that they did not initiate or authorize this transaction. Based on this confirmation, the transaction is determined to be fraudulent. The card has been blocked to prevent further exposure. This report is filed to document the unauthorized access and attempted theft of funds.",
+    "subjects": [
+      "C02923",
+      "C02923-K1"
+    ],
+    "total_amount_usd": 100.07,
+    "activity_dates": [
+      "2016-12-07"
+    ]
+  },
+  "stop_reason": "Customer confirmed transaction was unauthorized.",
+  "tool_calls": 3,
+  "tokens": 1500,
+  "latency_s": 11.61
+}

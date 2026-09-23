@@ -1,0 +1,76 @@
+{
+  "case_id": "HHG-010",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.9,
+    "pattern": "card_not_present_fraud",
+    "pattern_description": "High-value online transaction ($1,000.03) flagged with a 0.90 risk score, utilizing anonymous email domains (anonymous.com) for both sender and receiver.",
+    "affected_txn_ids": [
+      "3506725"
+    ],
+    "first_suspicious_txn_id": "3506725",
+    "connected_card_ids": [
+      "C10434-K1"
+    ],
+    "connected_device_profiles": [],
+    "exposure_usd": 1000.03,
+    "evidence": [
+      {
+        "claim": "Transaction risk score is 0.90",
+        "source": "graph",
+        "ref": "transaction.risk_score",
+        "entity_ids": [
+          "3506725"
+        ]
+      },
+      {
+        "claim": "Transaction uses anonymous email domains for both primary and recipient domains",
+        "source": "graph",
+        "ref": "transaction.p_emaildomain",
+        "entity_ids": [
+          "3506725"
+        ]
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Transaction 3506725 was flagged with a 0.90 risk score for a $1,000.03 online purchase. The use of anonymous.com email domains and the high-value nature of the CNP transaction without supporting history indicate fraud. The case is closed as fraud and a SAR has been filed.",
+    "written_to_graph": true,
+    "graph_case_id": "HHG-010"
+  },
+  "evidence_requests": [],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "auto",
+        "reason": "High risk score 0.90"
+      }
+    ],
+    "final": [
+      {
+        "action": "CLOSE_FRAUD",
+        "route": "L2",
+        "reason": "Confirmed CNP fraud pattern"
+      }
+    ],
+    "what_changed": "Risk score and email domain analysis confirmed fraudulent intent."
+  },
+  "sar": {
+    "file": true,
+    "reason": "High risk score and suspicious email domains",
+    "narrative": "Transaction 3506725 was flagged by the bank's automated risk scoring system on December 2, 2016. The transaction involved a high-value online purchase of $1,000.03 using card C10434-K1. The risk model assigned a score of 0.90, indicating a very high probability of fraudulent activity. Analysis of the transaction metadata showed that both the primary and recipient email domains were 'anonymous.com'. The use of anonymous email services is a frequent characteristic of Card-Not-Present (CNP) fraud. No prior transaction history for this customer supports a purchase of this magnitude through an online channel with these specific attributes. The combination of the high risk score and the suspicious email domains strongly suggests unauthorized account access or card detail theft. Consequently, the transaction has been identified as fraudulent to protect the customer and the institution. The card associated with the account has been immediately restricted. This report is filed to document the suspicious activity and the resulting financial exposure.",
+    "subjects": [
+      "C10434",
+      "C10434-K1"
+    ],
+    "total_amount_usd": 1000.03,
+    "activity_dates": [
+      "2016-12-02"
+    ]
+  },
+  "stop_reason": "High risk score (0.90) and use of anonymous email domains for a high-value online transaction confirm fraud.",
+  "tool_calls": 3,
+  "tokens": 1500,
+  "latency_s": 214.94
+}

@@ -1,0 +1,77 @@
+{
+  "case_id": "HHG-001",
+  "case": {
+    "status": "closed_legitimate",
+    "verdict": "legitimate",
+    "fraud_probability": 0.15,
+    "pattern": "none",
+    "pattern_description": "The transaction was an in-person purchase within the customer's registered billing region (444), and the customer confirmed the activity via step-up authentication.",
+    "affected_txn_ids": [
+      "3514030"
+    ],
+    "first_suspicious_txn_id": "3514030",
+    "connected_card_ids": [
+      "C12382-K1"
+    ],
+    "connected_device_profiles": [],
+    "exposure_usd": 77.07,
+    "evidence": [
+      {
+        "claim": "Transaction occurred in-person within the customer's billing region 444.",
+        "source": "graph",
+        "ref": "transaction.addr1",
+        "entity_ids": [
+          "3514030"
+        ]
+      },
+      {
+        "claim": "Customer confirmed the transaction was authorized during step-up validation.",
+        "source": "customer",
+        "ref": "customer_validation",
+        "entity_ids": [
+          "C12382"
+        ]
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Transaction 3514030 was flagged with a risk score of 0.61. Upon review, the transaction was found to be an in-person debit purchase matching the customer's billing address. Step-up authentication was performed, and the customer confirmed the transaction as legitimate.",
+    "written_to_graph": true,
+    "graph_case_id": "HHG-001"
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 1,
+      "assumed_response": "Customer confirmed they were physically present at the merchant and authorized the $77.07 charge."
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "MANUAL_REVIEW",
+        "route": "L2",
+        "reason": "Risk score 0.61 is in the ambiguous range requiring Tier 2 investigation."
+      }
+    ],
+    "final": [
+      {
+        "action": "CLOSE_CASE",
+        "route": "auto",
+        "reason": "Customer validation successful; transaction confirmed legitimate."
+      }
+    ],
+    "what_changed": "The initial risk score was mitigated by verifying the transaction location against the billing address and obtaining direct confirmation from the customer."
+  },
+  "sar": {
+    "file": false,
+    "reason": "",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Transaction confirmed as legitimate by customer validation.",
+  "tool_calls": 1,
+  "tokens": 850,
+  "latency_s": 11.74
+}

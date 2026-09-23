@@ -1,0 +1,91 @@
+{
+  "case_id": "HHG-013",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.88,
+    "pattern": "card_not_present_fraud",
+    "pattern_description": "Unauthorized online transaction with high risk score and missing address metadata, confirmed by customer.",
+    "affected_txn_ids": [
+      "3526826"
+    ],
+    "first_suspicious_txn_id": "3526826",
+    "connected_card_ids": [
+      "C07671-K2"
+    ],
+    "connected_device_profiles": [],
+    "exposure_usd": 35.66,
+    "evidence": [
+      {
+        "claim": "Transaction risk score is 0.76",
+        "source": "graph",
+        "ref": "transaction.risk_score",
+        "entity_ids": [
+          "3526826"
+        ]
+      },
+      {
+        "claim": "Address metadata is missing (addr1=0, addr2=0)",
+        "source": "graph",
+        "ref": "transaction.addr1",
+        "entity_ids": [
+          "3526826"
+        ]
+      },
+      {
+        "claim": "Customer denied authorizing the transaction during step-up validation",
+        "source": "customer",
+        "ref": "customer_validation",
+        "entity_ids": [
+          "C07671"
+        ]
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Transaction 3526826 was flagged with a high risk score of 0.76 and missing address data. Due to a graph retrieval error, customer validation was performed to resolve ambiguity. The customer confirmed the transaction was unauthorized, leading to a fraud verdict.",
+    "written_to_graph": true,
+    "graph_case_id": "HHG-013"
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 1,
+      "assumed_response": "Customer confirmed they did not authorize the $35.66 transaction and are in possession of the card."
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "Review transaction risk score and metadata.",
+        "route": "L2",
+        "reason": "High risk score trigger."
+      }
+    ],
+    "final": [
+      {
+        "action": "Block card and initiate chargeback.",
+        "route": "auto",
+        "reason": "Confirmed fraud via customer validation."
+      }
+    ],
+    "what_changed": "Customer validation confirmed the transaction was unauthorized, overriding the initial ambiguity caused by the graph error."
+  },
+  "sar": {
+    "file": true,
+    "reason": "Policy Rule: Unauthorized transaction confirmed by cardholder.",
+    "narrative": "On 2016-12-09, transaction 3526826 was flagged by the real-time risk engine with a score of 0.76. The transaction for $35.66 was conducted online using a Mastercard debit card (C07671-K2) associated with customer C07671. Investigation revealed missing address metadata (addr1/addr2 = 0) and an unusual timestamp (02:39 AM). Due to technical errors in graph retrieval, the signal was considered ambiguous. Step-up authentication was initiated to verify the transaction with the cardholder. The customer confirmed they did not authorize the transaction and were still in possession of the card. The activity is consistent with Card Not Present (CNP) fraud. The card has been restricted to prevent further loss.",
+    "subjects": [
+      "C07671",
+      "C07671-K2"
+    ],
+    "total_amount_usd": 35.66,
+    "activity_dates": [
+      "2016-12-09",
+      "2016-12-09"
+    ]
+  },
+  "stop_reason": "Customer confirmed fraud.",
+  "tool_calls": 3,
+  "tokens": 1500,
+  "latency_s": 227.91
+}

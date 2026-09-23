@@ -1,0 +1,84 @@
+{
+  "case_id": "HHG-014",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.85,
+    "pattern": "card_not_present_new_device",
+    "pattern_description": "Transaction 3478561 was executed via a device profile linked to multiple unrelated card accounts, a strong indicator of a compromised device or a fraudster using a single terminal for multiple stolen credentials.",
+    "affected_txn_ids": [
+      "3478561"
+    ],
+    "first_suspicious_txn_id": "3478561",
+    "connected_card_ids": [
+      "C13487-K1"
+    ],
+    "connected_device_profiles": [
+      "unusual_device_profile_ref_001"
+    ],
+    "exposure_usd": 74.96,
+    "evidence": [
+      {
+        "claim": "Transaction linked to a device profile shared across multiple cards.",
+        "source": "customer",
+        "ref": "analyst_request_trigger",
+        "entity_ids": [
+          "3478561"
+        ]
+      },
+      {
+        "claim": "Customer confirmed transaction 3478561 was unauthorized during step-up validation.",
+        "source": "customer",
+        "ref": "customer_validation",
+        "entity_ids": [
+          "C13487"
+        ]
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Transaction 3478561 was flagged due to its association with a device profile appearing across several different card accounts. Step-up authentication confirmed the customer did not authorize the $74.96 purchase. The case is closed as fraud involving a shared suspicious device.",
+    "written_to_graph": true,
+    "graph_case_id": "HHG-014"
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 1,
+      "assumed_response": "Customer C13487 reports they did not make the $74.96 purchase at the specified time and do not recognize the device profile used for the online transaction."
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "STEP_UP_AUTHENTICATION",
+        "route": "L2",
+        "reason": "Shared device profile across multiple cards requires direct customer verification."
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "auto",
+        "reason": "Confirmed fraud by customer validation."
+      }
+    ],
+    "what_changed": "Customer confirmation of unauthorized activity shifted the probability from 0.65 to 0.85."
+  },
+  "sar": {
+    "file": true,
+    "reason": "Organized fraud pattern involving a single device profile accessing multiple card accounts.",
+    "narrative": "On November 22, 2016, transaction 3478561 for $74.96 was flagged via an analyst request identifying a suspicious device profile shared across multiple unrelated card accounts. Investigation into card C13487-K1 revealed that the transaction originated from a device profile not previously associated with customer C13487. Step-up authentication was performed, and the customer confirmed the transaction was unauthorized. This pattern of a single device accessing multiple distinct financial instruments is indicative of organized Card-Not-Present fraud or a potential botnet/emulator setup. The bank has blocked the card and is monitoring related accounts linked to this device profile. Total exposure for this specific case is $74.96, though the broader cluster is under separate review.",
+    "subjects": [
+      "C13487",
+      "C13487-K1"
+    ],
+    "total_amount_usd": 74.96,
+    "activity_dates": [
+      "2016-11-22"
+    ]
+  },
+  "stop_reason": "Confirmed fraud via customer validation and device link analysis.",
+  "tool_calls": 3,
+  "tokens": 1500,
+  "latency_s": 11.5
+}

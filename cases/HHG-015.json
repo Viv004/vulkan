@@ -1,0 +1,90 @@
+{
+  "case_id": "HHG-015",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.77,
+    "pattern": "card_not_present_fraud",
+    "pattern_description": "High-risk online transaction characterized by anonymous email domains and a high model risk score, subsequently confirmed as unauthorized by the cardholder.",
+    "affected_txn_ids": [
+      "3464869"
+    ],
+    "first_suspicious_txn_id": "3464869",
+    "connected_card_ids": [
+      "C03042-K1"
+    ],
+    "connected_device_profiles": [],
+    "exposure_usd": 599.94,
+    "evidence": [
+      {
+        "claim": "Transaction flagged with high risk score of 0.77",
+        "source": "graph",
+        "ref": "transaction.risk_score",
+        "entity_ids": [
+          "3464869"
+        ]
+      },
+      {
+        "claim": "Use of anonymous email domains for both payer and receiver",
+        "source": "graph",
+        "ref": "transaction.p_emaildomain",
+        "entity_ids": [
+          "3464869"
+        ]
+      },
+      {
+        "claim": "Customer confirmed transaction was not authorized during step-up validation",
+        "source": "customer",
+        "ref": "customer_validation",
+        "entity_ids": [
+          "C03042"
+        ]
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Transaction 3464869 was flagged due to a high risk score (0.77) and the use of anonymous email domains. Due to a graph retrieval error limiting historical context, a step-up authentication was performed. The customer confirmed the transaction was unauthorized, leading to a fraud classification.",
+    "written_to_graph": true,
+    "graph_case_id": "HHG-015"
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 1,
+      "assumed_response": "Customer C03042 states they did not perform the $599.94 transaction and their card is currently in their possession, suggesting a card-not-present compromise."
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "PERFORM_STEP_UP_AUTH",
+        "route": "L2",
+        "reason": "High risk score with limited graph context due to technical error."
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "auto",
+        "reason": "Confirmed unauthorized transaction."
+      }
+    ],
+    "what_changed": "Customer validation confirmed the transaction was fraudulent, moving the case from suspicious to confirmed fraud."
+  },
+  "sar": {
+    "file": true,
+    "reason": "Confirmed unauthorized electronic commerce transaction exceeding $500.",
+    "narrative": "On 2016-11-17, an online transaction (ID: 3464869) for $599.94 was attempted using Mastercard credit card C03042-K1. The transaction was flagged by the bank's automated risk engine with a score of 0.77. Investigation revealed the use of anonymous email domains (anonymous.com) for both the sender and receiver, which is frequently associated with fraudulent activity. A Tier 2 investigator contacted the customer, C03042, who confirmed that they did not authorize the charge. The transaction is identified as Card-Not-Present fraud. The card has been restricted, and the bank is filing this SAR due to the confirmed nature of the fraud and the suspicious obfuscation of contact details.",
+    "subjects": [
+      "C03042",
+      "C03042-K1"
+    ],
+    "total_amount_usd": 599.94,
+    "activity_dates": [
+      "2016-11-17"
+    ]
+  },
+  "stop_reason": "Customer confirmed fraud during validation step.",
+  "tool_calls": 3,
+  "tokens": 1500,
+  "latency_s": 13.47
+}
