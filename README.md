@@ -7,7 +7,7 @@ Built for Hacker House Goa 2026 (IEEE-CIS Fraud Detection Benchmark)
 ### 🔗 Official Submission Links
 
 * **🔴 Live Dashboard & Technical Blog:** (https://vulkan26.netlify.app)
-* **▶️ Agent Demo Video:** `[INSERT YOUTUBE/LOOM URL HERE]`
+* **▶️ Agent Demo Video:** (https://youtu.be/D1em0ZT9R1E?si=8qyVhlu9469B536U)
 * **📊 Benchmark Artifacts:** The 20 graded JSON case files are located in `cases/`.
 
 ---
