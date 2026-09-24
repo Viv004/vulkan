@@ -110,4 +110,4 @@ npx expo start --web
 
 ---
 
-*Engineered at Kalinga Institute of Industrial Technology for Hacker House Goa 2026.*
+*Engineered at Team Veridian for Hacker House Goa 2026.*
