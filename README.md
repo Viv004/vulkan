@@ -6,9 +6,9 @@ Built for Hacker House Goa 2026 (IEEE-CIS Fraud Detection Benchmark)
 
 ### 🔗 Official Submission Links
 
-* **🔴 Live Dashboard & Technical Blog:** `[INSERT VERCEL URL HERE]`
+* **🔴 Live Dashboard & Technical Blog:** `https://vulkan26.netlify.app`
 * **▶️ Agent Demo Video:** `[INSERT YOUTUBE/LOOM URL HERE]`
-* **📊 Benchmark Artifacts:** The 20 graded JSON case files are located in `public/cases/`.
+* **📊 Benchmark Artifacts:** The 20 graded JSON case files are located in `cases/`.
 
 ---
 
@@ -77,8 +77,7 @@ For confirmed fraud with high exposure or syndicate connections, the agent auton
 
 ```text
 vulkan-agent/
-├── public/
-│   └── cases/                 # The 20 benchmark JSON files (Automated Grading)
+│── cases/                     # The 20 benchmark JSON files (Automated Grading)
 ├── Screens/                   # React Native Neo-Brutalist UI Components
 │   ├── LandingPage.js
 │   └── Dashboard.js
@@ -110,4 +109,4 @@ npx expo start --web
 
 ---
 
-*Engineered at Team Veridian for Hacker House Goa 2026.*
+*Engineered by Team Veridian for Hacker House Goa 2026.*
